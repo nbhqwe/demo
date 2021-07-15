@@ -1,0 +1,43 @@
+package com.xcmg.cloud.fleet.biz;
+
+import com.alibaba.csp.sentinel.util.HostNameUtil;
+import com.xcmg.cloud.fleet.oauth2.core.annotation.EnableFleetResourceServer;
+import com.xcmg.cloud.fleet.swagger.annotation.EnableFleetOpenApi;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.Environment;
+
+/**
+ * <p>
+ * 后台业务服务。
+ * </p>
+ *
+ * @author Brayden Zhou
+ * @version 1.0.0
+ * @date 2021/02/13
+ */
+
+@EnableFleetOpenApi
+@EnableFeignClients(basePackages = {"com.xcmg.cloud.fleet.api.feign"})
+@EnableFleetResourceServer
+@SpringBootApplication
+public class BizServiceApplication {
+
+    private final static Logger logger = LoggerFactory.getLogger(BizServiceApplication.class);
+
+    public static void main(String[] args) {
+        ConfigurableApplicationContext application = SpringApplication.run(BizServiceApplication.class, args);
+        Environment env = application.getEnvironment();
+        String ip = HostNameUtil.getIp();
+        String port = env.getProperty("server.port");
+        logger.info("\n----------------------------------------------------------\n\t"
+                + "Application XCMGBizApplication is running! Access URLs:\n\t" + "Local: \t\thttp://localhost:" + port
+                + "/\n\t" + "External: \thttp://" + ip + ":" + port + "/\n\t"
+                + "----------------------------------------------------------");
+    }
+}
+
